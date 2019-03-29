@@ -161,6 +161,7 @@ var (
 		"Filtering out schedulable pods before CA scale up by trying to pack the schedulable pods on free capacity on existing nodes."+
 			"Setting it to false employs a more lenient filtering approach that does not try to pack the pods on the nodes."+
 			"Pods with nominatedNodeName set are always filtered out.")
+	instanceId                          = flag.String("instance-id", "cluster-autoscaler", "A unique identifier for this cluster-autoscaler instance.")
 )
 
 func createAutoscalingOptions() config.AutoscalingOptions {
@@ -363,7 +364,7 @@ func main() {
 		lock, err := resourcelock.New(
 			leaderElection.ResourceLock,
 			*namespace,
-			"cluster-autoscaler",
+			*instanceId,
 			kubeClient.CoreV1(),
 			kubeClient.CoordinationV1(),
 			resourcelock.ResourceLockConfig{
